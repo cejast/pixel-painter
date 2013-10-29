@@ -40,14 +40,21 @@ server.listen( port);
 //Setup Socket.IO
 var io = io.listen(server);
 io.sockets.on('connection', function(socket){
+  
   console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('server_message',data);
-    socket.emit('server_message',data);
-  });
+  
   socket.on('disconnect', function(){
     console.log('Client Disconnected.');
   });
+
+  socket.on('draw', function(data){
+    io.sockets.emit('server_brush', data);
+  });
+
+  socket.on('clear', function(data){
+    io.sockets.emit('server_clear', data);
+  });
+
 });
 
 
